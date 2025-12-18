@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, LayoutDashboard, Settings, Bell, Search, User as UserIcon, Book, Moon, Sun, BrainCircuit, Network, Layers } from 'lucide-react';
+import { LogOut, LayoutDashboard, Search, User as UserIcon, Moon, Sun, BrainCircuit, Network, Layers, BookOpen } from 'lucide-react';
 import { User } from '../types';
 
 interface LayoutProps {
@@ -17,80 +17,71 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onSearch, act
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
+      document.body.style.backgroundColor = '#020617';
     } else {
       document.documentElement.classList.remove('dark');
+      document.body.style.backgroundColor = '#f1f5f9';
     }
   }, [isDark]);
 
   return (
-    <div className={`min-h-screen flex flex-col selection:bg-accent selection:text-slate-900 transition-colors duration-300 ${isDark ? 'dark bg-darkbg' : 'bg-slate-100'}`}>
+    <div className={`min-h-screen flex flex-col transition-colors duration-500 ${isDark ? 'dark bg-darkbg' : 'bg-[#f1f5f9]'}`}>
       
-      <header className="sticky top-0 z-50 px-6 py-4">
-        <div className="max-w-7xl mx-auto glass-panel rounded-2xl px-6 py-3 flex items-center justify-between shadow-2xl border-white/20 dark:border-white/10">
+      <header className="sticky top-0 z-[100] px-6 py-4">
+        <div className="max-w-7xl mx-auto glass-panel rounded-2xl px-6 py-3 flex items-center justify-between shadow-2xl border-white/20 dark:border-white/10 dark:bg-slate-900/80 bg-white/90">
           <div className="flex items-center gap-4">
-             <div className="bg-gradient-to-br from-indigo-500 to-cyan-400 p-2.5 rounded-xl shadow-lg shadow-indigo-500/30 animate-pulse-slow">
+             <div className="bg-gradient-to-br from-indigo-600 to-cyan-500 p-2.5 rounded-xl shadow-lg shadow-indigo-500/20">
                 <BrainCircuit className="text-white w-5 h-5" />
              </div>
              <div className="flex flex-col">
-               <span className="font-display font-extrabold text-2xl tracking-tighter dark:text-white text-slate-900 flex items-center gap-1">
-                 AMEP <span className="text-[10px] bg-accent/20 text-accent px-1.5 py-0.5 rounded uppercase tracking-widest font-black">NEXUS</span>
+               <span className="font-display font-black text-2xl tracking-tighter dark:text-white text-slate-900 flex items-center gap-2 group cursor-pointer">
+                 <span className="group-hover:text-indigo-600 transition-colors">AMEP</span> 
+                 <span className="text-[10px] bg-indigo-600/10 text-indigo-600 px-2 py-0.5 rounded-full uppercase tracking-widest font-black border border-indigo-600/20">Nexus v6</span>
                </span>
              </div>
              
-             <div className="ml-10 hidden lg:flex items-center gap-8">
-                <button 
-                  onClick={() => setActiveView('hub')}
-                  className={`text-sm font-bold flex items-center gap-2 transition-all ${activeView === 'hub' ? 'text-indigo-600 dark:text-accent underline underline-offset-8' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white'}`}
-                >
-                   <LayoutDashboard className="w-4 h-4" /> Hub
-                </button>
-                <button 
-                  onClick={() => setActiveView('segments')}
-                  className={`text-sm font-bold flex items-center gap-2 transition-all ${activeView === 'segments' ? 'text-indigo-600 dark:text-accent underline underline-offset-8' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white'}`}
-                >
-                   <Layers className="w-4 h-4" /> Segments
-                </button>
-                <button 
-                  onClick={() => setActiveView('neural')}
-                  className={`text-sm font-bold flex items-center gap-2 transition-all ${activeView === 'neural' ? 'text-indigo-600 dark:text-accent underline underline-offset-8' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white'}`}
-                >
-                   <Network className="w-4 h-4" /> Neural-Net
-                </button>
+             <div className="ml-10 hidden lg:flex items-center gap-1">
+                {[
+                  { id: 'hub', label: 'Hub', icon: LayoutDashboard },
+                  { id: 'segments', label: 'Segments', icon: Layers },
+                  { id: 'library', label: 'Library', icon: BookOpen }
+                ].map(nav => (
+                  <button 
+                    key={nav.id}
+                    onClick={() => setActiveView(nav.id)}
+                    className={`px-4 py-2 rounded-xl text-sm font-black flex items-center gap-2 transition-all ${activeView === nav.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 dark:text-slate-400'}`}
+                  >
+                    <nav.icon className="w-4 h-4" /> {nav.label}
+                  </button>
+                ))}
              </div>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-4">
              <button 
                onClick={() => setIsDark(!isDark)}
-               className="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 hover:text-accent transition-all"
+               className="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-600 transition-all border border-slate-300 dark:border-white/5"
              >
                 {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
              </button>
 
              <div className="relative group hidden sm:block">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-accent transition-colors" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                 <input 
                   type="text" 
                   onChange={(e) => onSearch(e.target.value)}
-                  placeholder="Universal Search..." 
-                  className="bg-slate-200/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 dark:text-white text-slate-900 w-48 focus:w-64 transition-all"
+                  placeholder="Mastery Search..." 
+                  className="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 dark:text-white text-slate-900 w-48 focus:w-80 transition-all"
                 />
              </div>
              
              {user && (
-               <div className="flex items-center gap-4 pl-4 border-l border-slate-300 dark:border-slate-800">
+               <div className="flex items-center gap-4 pl-4 border-l border-slate-300 dark:border-white/10">
                  <div className="text-right hidden xl:block">
-                   <p className="text-sm font-bold dark:text-white text-slate-900">{user.name}</p>
-                   <p className="text-[10px] text-indigo-600 dark:text-accent font-black uppercase tracking-widest">{user.role}</p>
+                   <p className="text-sm font-black dark:text-white text-slate-900 leading-none mb-1">{user.name}</p>
+                   <p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest">{user.role}</p>
                  </div>
-                 <div className="w-10 h-10 rounded-xl bg-slate-300 dark:bg-slate-800 border border-slate-400 dark:border-slate-700 flex items-center justify-center overflow-hidden">
-                    <UserIcon className="w-6 h-6 text-slate-500" />
-                 </div>
-                 <button 
-                  onClick={onLogout}
-                  className="p-2.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all"
-                  title="Logout"
-                 >
+                 <button onClick={onLogout} className="p-2.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-lg">
                    <LogOut className="w-5 h-5" />
                  </button>
                </div>
@@ -99,17 +90,17 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onSearch, act
         </div>
       </header>
 
-      <main className="flex-1 px-6 py-6 overflow-x-hidden">
+      <main className="flex-1 px-6 py-6">
         <div className="max-w-7xl mx-auto w-full">
           {children}
         </div>
       </main>
 
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-panel rounded-full px-8 py-4 flex items-center justify-around md:hidden shadow-2xl border-white/20">
-         <LayoutDashboard className={`w-6 h-6 ${activeView === 'hub' ? 'text-accent' : 'text-slate-500'}`} onClick={() => setActiveView('hub')} />
-         <Layers className={`w-6 h-6 ${activeView === 'segments' ? 'text-accent' : 'text-slate-500'}`} onClick={() => setActiveView('segments')} />
-         <Network className={`w-6 h-6 ${activeView === 'neural' ? 'text-accent' : 'text-slate-500'}`} onClick={() => setActiveView('neural')} />
-         <Settings className="w-6 h-6 text-slate-500" />
+      {/* Mobile Nav */}
+      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-panel rounded-full px-8 py-4 flex items-center justify-around md:hidden shadow-2xl border-white/20 z-[100] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl">
+         <LayoutDashboard className={`w-6 h-6 cursor-pointer ${activeView === 'hub' ? 'text-indigo-600' : 'text-slate-400'}`} onClick={() => setActiveView('hub')} />
+         <Layers className={`w-6 h-6 cursor-pointer ${activeView === 'segments' ? 'text-indigo-600' : 'text-slate-400'}`} onClick={() => setActiveView('segments')} />
+         <BookOpen className={`w-6 h-6 cursor-pointer ${activeView === 'library' ? 'text-indigo-600' : 'text-slate-400'}`} onClick={() => setActiveView('library')} />
       </nav>
     </div>
   );

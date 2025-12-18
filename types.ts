@@ -1,3 +1,4 @@
+
 export type Role = 'student' | 'teacher';
 
 export interface User {
@@ -10,12 +11,22 @@ export interface User {
 
 export type MasteryLevel = 'Low' | 'Medium' | 'High';
 
+export interface Resource {
+  type: 'diagram' | 'video' | 'pdf' | 'link';
+  title: string;
+  url: string;
+}
+
 export interface Topic {
   id: string;
   name: string;
   icon: string;
   description: string;
   pathId: string;
+  content?: string; // Markdown or Rich Text notes
+  diagrams?: string[]; // Array of base64 or URL strings for visual aids
+  resources?: Resource[];
+  examFocus?: ('MU' | 'GATE' | 'ISRO' | 'ESE')[];
 }
 
 export interface LearningPath {
@@ -23,6 +34,7 @@ export interface LearningPath {
   name: string;
   description: string;
   topics: string[]; // Topic IDs
+  category: 'MU Syllabus' | 'Competitive' | 'Core Engineering';
 }
 
 export interface Question {

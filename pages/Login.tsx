@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { User as UserIcon, GraduationCap, Mail, ArrowRight, BrainCircuit, AlertCircle } from 'lucide-react';
 import { Role, User } from '../types';
@@ -20,7 +21,8 @@ const Login: React.FC<Props> = ({ onLogin }) => {
 
     if (isLogin) {
       const result = loginUser(email);
-      if (result.success && result.user) {
+      // Fixed: result.message access is now safe because of discriminated union narrowing on success property
+      if (result.success) {
         onLogin(result.user);
       } else {
         setError(result.message);
@@ -37,6 +39,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
         role
       };
       const result = registerUser(newUser);
+      // Fixed: result.message property access is now type-safe in the else branch due to discriminated union in mockBackend
       if (result.success) {
         onLogin(newUser);
       } else {
